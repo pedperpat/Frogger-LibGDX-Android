@@ -18,7 +18,7 @@ public class StickDireccion extends Touchpad {
 
     public StickDireccion(float x, float y) {
         super(10, getTouchpadStyle());
-        setBounds(65, 65, 300, 300);
+        setBounds(65, 65, 250, 250);
         setPosition(x,y);
     }
 
