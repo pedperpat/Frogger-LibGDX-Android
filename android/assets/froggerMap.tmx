@@ -2,6 +2,161 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="34" tilewidth="32" tileheight="32" nextobjectid="1">
  <tileset firstgid="1" name="Mapa del juego" tilewidth="32" tileheight="32" tilecount="1980" columns="60">
   <image source="background2.png" width="1920" height="1080"/>
+  <tile id="6">
+   <properties>
+    <property name="bloqueado" value=""/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="67">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="68">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="69">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="70">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="71">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="72">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="73">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="74">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="75">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="76">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="77">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="78">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="79">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="80">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
+  <tile id="81">
+   <properties>
+    <property name="completado" value=""/>
+   </properties>
+  </tile>
   <tile id="227">
    <properties>
     <property name="bloqueado" value=""/>
@@ -490,8 +645,8 @@
  </tileset>
  <layer name="Capa de Patrones 1" width="60" height="34">
   <data encoding="csv">
-231,232,233,234,235,236,237,238,239,40,41,42,43,40,41,42,43,40,41,42,43,40,41,42,43,229,230,229,230,231,51,52,53,40,41,42,43,40,41,42,43,40,41,42,43,40,41,42,43,230,231,51,52,53,228,229,230,231,232,233,
-291,292,293,294,295,296,297,298,299,100,101,102,103,100,101,102,103,100,101,102,103,100,101,102,103,289,290,289,290,291,111,112,113,100,101,102,103,100,101,102,103,100,101,102,103,100,101,102,103,290,291,111,112,113,288,289,290,291,292,293,
+231,232,233,234,235,236,237,238,239,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,229,230,229,230,231,51,52,53,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,230,231,51,52,53,228,229,230,231,232,233,
+291,292,293,294,295,296,297,298,299,307,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,289,290,289,290,291,111,112,113,307,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,290,291,111,112,113,288,289,290,291,292,293,
 231,232,233,234,235,236,237,238,239,157,158,159,160,161,162,163,164,165,166,157,158,159,160,161,162,342,343,282,342,282,342,343,282,158,158,158,158,158,158,158,158,158,158,158,158,158,158,158,159,228,229,230,231,232,233,234,235,236,237,238,
 291,293,293,293,295,296,297,298,299,217,218,219,220,221,222,223,224,225,226,217,218,219,220,221,222,342,343,342,342,342,342,343,342,218,218,218,218,218,218,218,218,218,218,218,218,218,218,218,219,288,289,290,291,292,293,294,295,296,297,298,
 229,293,293,293,233,234,235,236,237,238,239,238,239,235,236,237,238,239,236,235,238,239,235,236,237,238,239,237,238,239,236,237,238,239,235,236,237,238,239,235,236,237,238,239,234,235,236,237,238,239,229,230,231,232,233,234,235,236,237,238,

@@ -11,7 +11,6 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 
 public class AndroidLauncher extends AndroidApplication {
-    final AndroidLauncher context=this;
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

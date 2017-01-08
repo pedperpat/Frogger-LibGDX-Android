@@ -1,7 +1,6 @@
 package com.pedro.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class Frogger extends Game {
 
