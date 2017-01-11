@@ -12,13 +12,14 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Vehicle extends Sprite {
 
-    private float speed = 55;
+    private float speed;
     private Vector2 velocity = new Vector2();
     private TiledMapTileLayer collisionLayer;
 
-    public Vehicle(Sprite sprite, TiledMapTileLayer collisionLayer) {
+    public Vehicle(Sprite sprite, TiledMapTileLayer collisionLayer, float speed) {
         super(sprite);
         this.collisionLayer = collisionLayer;
+        this.speed = speed;
         setSize(getWidth(), getHeight() * 1.5f);
     }
 

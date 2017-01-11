@@ -67,14 +67,23 @@ public class Player extends Sprite {
     }
 
     private boolean isCellBlocked(float x, float y) {
-        TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
+        TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()),
+                (int) (y / collisionLayer.getTileHeight()));
         return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("bloqueado");
     }
 
+    private boolean isWater(float x, float y) {
+        TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()),
+                (int) (y / collisionLayer.getTileHeight()));
+        return cell.getTile().getProperties().containsKey("agua");
+    }
+
     public boolean collidesRight() {
-        for(float step = 0; step < getHeight(); step += collisionLayer.getTileHeight() / 2)
-            if(isCellBlocked(getX() + getWidth(), getY() + step))
+        for(float step = 0; step < getHeight(); step += collisionLayer.getTileHeight() / 2) {
+            if (isCellBlocked(getX() + getWidth(), getY() + step)) {
                 return true;
+            }
+        }
         return false;
     }
 
@@ -96,6 +105,39 @@ public class Player extends Sprite {
     public boolean collidesBottom() {
         for(float step = 0; step < getWidth(); step += collisionLayer.getTileWidth() / 2)
             if(isCellBlocked(getX() + step, getY()))
+                return true;
+        return false;
+    }
+
+    ///////////////////////////////////////
+
+    public boolean collidesRightWater() {
+        for(float step = 0; step < getHeight(); step += collisionLayer.getTileHeight() / 2) {
+            if (isWater(getX() + getWidth(), getY() + step)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean collidesLeftWater() {
+        for(float step = 0; step < getHeight(); step += collisionLayer.getTileHeight() / 2)
+            if(isWater(getX(), getY() + step))
+                return true;
+        return false;
+    }
+
+    public boolean collidesTopWater() {
+        for(float step = 0; step < getWidth(); step += collisionLayer.getTileWidth() / 2)
+            if(isWater(getX() + step, getY() + getHeight()))
+                return true;
+        return false;
+
+    }
+
+    public boolean collidesBottomWater() {
+        for(float step = 0; step < getWidth(); step += collisionLayer.getTileWidth() / 2)
+            if(isWater(getX() + step, getY()))
                 return true;
         return false;
     }

@@ -1,8 +1,10 @@
 package com.pedro.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,29 +40,37 @@ public class Pantalla implements Screen, InputProcessor {
     private String[] vehiculos = new String[] { "vehiculo0.png", "vehiculo1.png", "vehiculo2.png",
             "vehiculo3.png", "vehiculo4.png", "vehiculo5.png", "vehiculo6.png" };
     private Rectangle playerRect;
-    private Rectangle vehicleRect1, vehicleRect2, vehicleRect3,vehicleRect4;
+    private Rectangle vehicleRect1, vehicleRect2, vehicleRect3,vehicleRect4, trunkRect1,trunkRect2;
+    private Sound crash = Gdx.audio.newSound(Gdx.files.internal("crash.wav")),
+            ro = Gdx.audio.newSound(Gdx.files.internal("Ro1.mp3")),
+            cuca = Gdx.audio.newSound(Gdx.files.internal("cucaracha.mp3")),
+            gameOverAudio = Gdx.audio.newSound(Gdx.files.internal("gameOver.wav"));
 
     public void update()
     {
-        playerRect = new Rectangle(player.getX(), player.getY(),
-                player.getWidth(),
-                player.getHeight());
-        vehicleRect1 = new Rectangle(vehicle1.getX(), vehicle1.getY(),
-                vehicle1.getWidth(), vehicle1.getHeight());
-
-        vehicleRect2 = new Rectangle(vehicle2.getX(), vehicle2.getY(),
-                vehicle2.getWidth(), vehicle2.getHeight());
-
-        vehicleRect3 = new Rectangle(vehicle3.getX(), vehicle3.getY(),
-                vehicle3.getWidth(), vehicle3.getHeight());
-
-        vehicleRect4 = new Rectangle(vehicle4.getX(), vehicle4.getY(),
-                vehicle4.getWidth(), vehicle4.getHeight());
+        playerRect = new Rectangle(player.getX(), player.getY(), player.getWidth() - 48, player.getHeight() - 48);
+        vehicleRect1 = new Rectangle(vehicle1.getX(), vehicle1.getY(), vehicle1.getWidth(), vehicle1.getHeight());
+        vehicleRect2 = new Rectangle(vehicle2.getX(), vehicle2.getY(), vehicle2.getWidth(), vehicle2.getHeight());
+        vehicleRect3 = new Rectangle(vehicle3.getX(), vehicle3.getY(), vehicle3.getWidth(), vehicle3.getHeight());
+        vehicleRect4 = new Rectangle(vehicle4.getX(), vehicle4.getY(), vehicle4.getWidth(), vehicle4.getHeight());
+        trunkRect1 = new Rectangle(trunk1.getX(), trunk1.getY(), trunk1.getWidth(), trunk1.getHeight());
+        trunkRect2 = new Rectangle(trunk2.getX(), trunk2.getY(), trunk2.getWidth(), trunk2.getHeight());
 
         // If player collides with some vehicle...
         if (isOverlapping(playerRect,vehicleRect1) || isOverlapping(playerRect,vehicleRect2)
                 || isOverlapping(playerRect,vehicleRect3) || isOverlapping(playerRect,vehicleRect4))
         {
+            int n = r.nextInt(3);
+            if(n == 0) {
+                crash.play();
+            }
+            else if(n == 1) {
+                ro.play();
+            }
+            else if(n == 2) {
+                cuca.play();
+            }
+
             player.setX(870);
             player.setY(50);
             if(lifes != 0 && lifes < 4) {
@@ -80,12 +90,29 @@ public class Pantalla implements Screen, InputProcessor {
                 life = new Sprite(new Texture("ultimaVida.png"));
                 life.setPosition(20,1000);
                 life.setSize(80,80);
+                gameOverAudio.play();
             }
+            // TODO: Conseguir sacar la pantalla de Game Over.
+
+
+            // TODO: Conseguir la colisión con la plataforma.
+        }
+        else if(isOverlapping(playerRect, trunkRect1)) {
+            player.setX(trunk1.getX());
+            player.setY(trunk1.getY());
+            player.setX(player.getX() + analogico.getKnobPercentX() * player.getSpeed());
+            player.setY(player.getY() + analogico.getKnobPercentY() * player.getSpeed());
+        }
+        else if(isOverlapping(playerRect, trunkRect2)) {
+            player.setX(trunk2.getX());
+            player.setY(trunk2.getY());
+            player.setX(player.getX() + analogico.getKnobPercentX() * player.getSpeed());
+            player.setY(player.getY() + analogico.getKnobPercentY() * player.getSpeed());
         }
     }
 
-    public boolean isOverlapping(Rectangle player, Rectangle vehicle) {
-        if(player.overlaps(vehicle)) {
+    public boolean isOverlapping(Rectangle player, Rectangle element) {
+        if(player.overlaps(element)) {
             return true;
         }
         return false;
@@ -104,49 +131,7 @@ public class Pantalla implements Screen, InputProcessor {
                 layer0.getHeight() * layer0.getTileHeight() / 2, 0);
         camera.position.set(center);
 
-        life = new Sprite(new Texture("3vidas.png"));
-
-        life.setPosition(20,1000);
-        life.setSize(80,80);
-
-
-        player = new Player(new Sprite(new Texture("0.png")), (TiledMapTileLayer)mapa.getLayers().get(0));
-        player.setPosition(870,50);
-        player.setSize(64,64);
-
-        vehicle1 = new Vehicle(new Sprite(new Texture(vehiculos[r.nextInt(6)])),
-                (TiledMapTileLayer)mapa.getLayers().get(0));
-        vehicle1.setPosition(0, r.nextInt((400 - 200) + 1) + 200);
-        vehicle1.setSize(64,64);
-
-        vehicle2 = new Vehicle(new Sprite(new Texture(vehiculos[r.nextInt(6)])),
-                (TiledMapTileLayer)mapa.getLayers().get(0));
-        vehicle2.setPosition(20, r.nextInt((500 - 430) + 1) + 430);
-        vehicle2.setSize(64,64);
-
-        vehicle3 = new Vehicle(new Sprite(new Texture(vehiculos[r.nextInt(6)])),
-                (TiledMapTileLayer)mapa.getLayers().get(0));
-        vehicle3.setPosition(1900, r.nextInt((550 - 500) + 1) + 500);
-        vehicle3.setSize(64,64);
-
-        vehicle4 = new Vehicle(new Sprite(new Texture(vehiculos[r.nextInt(6)])),
-                (TiledMapTileLayer)mapa.getLayers().get(0));
-        vehicle4.setPosition(2000, r.nextInt((250 - 220) + 1) + 220);
-        vehicle4.setSize(64,64);
-
-        trunk1 = new RiverTrunk((new Sprite(new Texture("trunk.png"))),
-                (TiledMapTileLayer)mapa.getLayers().get(0));
-        trunk1.setPosition(400,895);
-        trunk1.setSize(64,64);
-
-        trunk2 = new RiverTrunk((new Sprite(new Texture("trunk.png"))),
-                (TiledMapTileLayer)mapa.getLayers().get(0));
-        trunk2.setPosition(600,765);
-        trunk2.setSize(64,64);
-
-        analogico = new StickDireccion(65,65);
-        stage = new Stage(new ScreenViewport());
-        stage.addActor(analogico);
+        sprites();
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -159,10 +144,13 @@ public class Pantalla implements Screen, InputProcessor {
         renderer.setView(camera);
         renderer.render();
 
-        if(!player.collidesBottom() && !player.collidesLeft() && !player.collidesRight() && !player.collidesTop()) {
-            player.setX(player.getX() + analogico.getKnobPercentX()*player.getSpeed());
-            player.setY(player.getY() + analogico.getKnobPercentY()*player.getSpeed());
-        }else {
+        if(!player.collidesBottom() && !player.collidesLeft() && !player.collidesRight() && !player.collidesTop() &&
+                !player.collidesBottomWater() && !player.collidesLeftWater() && !player.collidesRightWater()
+                && !player.collidesTopWater()) {
+            player.setX(player.getX() + analogico.getKnobPercentX() * player.getSpeed());
+            player.setY(player.getY() + analogico.getKnobPercentY() * player.getSpeed());
+        }
+        else {
             player.setX(870);
             player.setY(50);
         }
@@ -181,6 +169,50 @@ public class Pantalla implements Screen, InputProcessor {
         stage.draw();
 
         update();
+    }
+
+    public void sprites() {
+        life = new Sprite(new Texture("3vidas.png"));
+        life.setPosition(20,1000);
+        life.setSize(80,80);
+
+        player = new Player(new Sprite(new Texture("0.png")), (TiledMapTileLayer)mapa.getLayers().get(0));
+        player.setPosition(870,50);
+        player.setSize(64,64);
+
+        vehicle1 = new Vehicle(new Sprite(new Texture(vehiculos[r.nextInt(6)])),
+                (TiledMapTileLayer)mapa.getLayers().get(0), 70);
+        vehicle1.setPosition(0, r.nextInt((400 - 200) + 1) + 200);
+        vehicle1.setSize(64,64);
+
+        vehicle2 = new Vehicle(new Sprite(new Texture(vehiculos[r.nextInt(6)])),
+                (TiledMapTileLayer)mapa.getLayers().get(0), 40);
+        vehicle2.setPosition(20, r.nextInt((500 - 430) + 1) + 430);
+        vehicle2.setSize(64,64);
+
+        vehicle3 = new Vehicle(new Sprite(new Texture(vehiculos[r.nextInt(6)])),
+                (TiledMapTileLayer)mapa.getLayers().get(0), 50);
+        vehicle3.setPosition(1900, r.nextInt((550 - 500) + 1) + 500);
+        vehicle3.setSize(64,64);
+
+        vehicle4 = new Vehicle(new Sprite(new Texture(vehiculos[r.nextInt(6)])),
+                (TiledMapTileLayer)mapa.getLayers().get(0), 35);
+        vehicle4.setPosition(2000, r.nextInt((250 - 220) + 1) + 220);
+        vehicle4.setSize(64,64);
+
+        trunk1 = new RiverTrunk((new Sprite(new Texture("trunk.png"))),
+                (TiledMapTileLayer)mapa.getLayers().get(0));
+        trunk1.setPosition(400,895);
+        trunk1.setSize(64,64);
+
+        trunk2 = new RiverTrunk((new Sprite(new Texture("trunk.png"))),
+                (TiledMapTileLayer)mapa.getLayers().get(0));
+        trunk2.setPosition(600,765);
+        trunk2.setSize(64,64);
+
+        analogico = new StickDireccion(65,65);
+        stage = new Stage(new ScreenViewport());
+        stage.addActor(analogico);
     }
 
     @Override
@@ -215,6 +247,10 @@ public class Pantalla implements Screen, InputProcessor {
         trunk1.getTexture().dispose();
         trunk2.getTexture().dispose();
         life.getTexture().dispose();
+        crash.dispose();
+        cuca.dispose();
+        ro.dispose();
+        gameOverAudio.dispose();
     }
 
     @Override

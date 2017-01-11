@@ -6,10 +6,7 @@ public class Frogger extends Game {
 
 	@Override
 	public void create () {
-		// Para usar un mapa de tiles y mejorar las colisiones con los elementos del mapa.
-		////////////////////////
 		setScreen(new Pantalla());
-		////////////////////////
 	}
 
 	@Override
