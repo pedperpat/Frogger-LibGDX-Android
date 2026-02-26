@@ -115,18 +115,21 @@ public class Pantalla implements Screen, InputProcessor {
             lifes--;
         }
         if (lifes == 2) {
+            life.getTexture().dispose();
             life = new Sprite(new Texture("2vidas.png"));
             life.setPosition(20, 1000);
             life.setSize(80, 80);
         } else if (lifes == 1) {
+            life.getTexture().dispose();
             life = new Sprite(new Texture("1vida.png"));
             life.setPosition(20, 1000);
             life.setSize(80, 80);
         } else if (lifes == 0) {
+            life.getTexture().dispose();
             life = new Sprite(new Texture("ultimaVida.png"));
             life.setPosition(20, 1000);
             life.setSize(80, 80);
-            pantallaGameOver.setGameOverScreen();
+            Gdx.app.postRunnable(() -> pantallaGameOver.setGameOverScreen());
         }
     }
 
