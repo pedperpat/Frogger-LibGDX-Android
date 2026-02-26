@@ -15,7 +15,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Random;
 
@@ -32,6 +33,7 @@ public class Pantalla implements Screen, InputProcessor {
     private TiledMap mapa;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
+    private Viewport viewport;
     private Player player;
     private Vehicle vehicle1, vehicle2, vehicle3, vehicle4;
     private RiverTrunk trunk1, trunk2;
@@ -142,10 +144,14 @@ public class Pantalla implements Screen, InputProcessor {
 
         renderer = new OrthogonalTiledMapRenderer(mapa);
         camera = new OrthographicCamera();
+
         TiledMapTileLayer layer0 = (TiledMapTileLayer) mapa.getLayers().get(0);
-        Vector3 center = new Vector3(layer0.getWidth() * layer0.getTileWidth() / 2,
-                layer0.getHeight() * layer0.getTileHeight() / 2, 0);
-        camera.position.set(center);
+        float mapWidth = layer0.getWidth() * layer0.getTileWidth();
+        float mapHeight = layer0.getHeight() * layer0.getTileHeight();
+
+        viewport = new FitViewport(mapWidth, mapHeight, camera);
+        viewport.apply();
+        camera.position.set(mapWidth / 2, mapHeight / 2, 0);
 
         sprites();
 
@@ -162,6 +168,7 @@ public class Pantalla implements Screen, InputProcessor {
         renderer.setView(camera);
         renderer.render();
 
+        renderer.getBatch().setProjectionMatrix(camera.combined);
         renderer.getBatch().begin();
         player.draw(renderer.getBatch());
         vehicle1.draw(renderer.getBatch());
@@ -217,15 +224,14 @@ public class Pantalla implements Screen, InputProcessor {
         trunk2.setSize(64, 64);
 
         analogico = new StickDireccion(65, 65);
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new FitViewport(1920, 1080));
         stage.addActor(analogico);
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
-        camera.update();
+        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -295,7 +301,12 @@ public class Pantalla implements Screen, InputProcessor {
     }
 
     @Override
-    public boolean scrolled(int amount) {
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
         return false;
     }
 }
