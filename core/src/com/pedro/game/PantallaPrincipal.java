@@ -21,6 +21,7 @@ public class PantallaPrincipal implements Screen{
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private FitViewport viewport;
+    private Texture texture;
     private TextureRegion backgroundTexture;
     private List<Textos> textosPantalla = new ArrayList<Textos>();
 
@@ -35,7 +36,8 @@ public class PantallaPrincipal implements Screen{
         viewport = new FitViewport(1920, 1080, camera);
         viewport.apply();
 
-        backgroundTexture = new TextureRegion(new Texture("background2.png"), 0, 0, 1920, 1080);
+        texture = new Texture("background2.png");
+        backgroundTexture = new TextureRegion(texture, 0, 0, 1920, 1080);
 
         textosPantalla.add(new Textos("NUEVA PARTIDA", 715, 900));
         textosPantalla.add(new Textos("PUNTUACIONES", 715, 600));
@@ -85,10 +87,15 @@ public class PantallaPrincipal implements Screen{
 
     @Override
     public void hide() {
+        dispose();
     }
 
     @Override
     public void dispose() {
         batch.dispose();
+        texture.dispose();
+        for(Textos texto : textosPantalla) {
+            texto.dispose();
+        }
     }
 }

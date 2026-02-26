@@ -3,12 +3,13 @@ package com.pedro.game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * Created by Pedro Antonio on 17/01/2017.
  */
 
-public class Textos {
+public class Textos implements Disposable {
     private GlyphLayout layout;
     private BitmapFont font;
     private String text;
@@ -26,5 +27,10 @@ public class Textos {
 
     public void update(SpriteBatch batch) {
         font.draw(batch, layout, x, y);
+    }
+
+    @Override
+    public void dispose() {
+        font.dispose();
     }
 }
