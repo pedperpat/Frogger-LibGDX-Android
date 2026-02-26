@@ -28,13 +28,19 @@ public class RiverTrunk extends Sprite {
     }
 
     public void update(float delta) {
-        if(getX() < 1000) {
-            velocity.x += speed;
+        if (getX() >= 1000) {
+            velocity.x = -speed;
+        } else if (getX() <= 0) {
+            velocity.x = speed;
         }
-        else if(getX() > 0) {
-            velocity.x += -speed;
+        if (velocity.x == 0) {
+            velocity.x = speed;
         }
 
         setX(getX() + velocity.x * delta);
+    }
+
+    public Vector2 getVelocity() {
+        return velocity;
     }
 }

@@ -51,6 +51,17 @@ public class Pantalla implements Screen, InputProcessor {
     }
 
     public void update() {
+        // Move player
+        float delta = Gdx.graphics.getDeltaTime();
+        player.setX(player.getX() + analogico.getKnobPercentX() * player.getSpeed());
+        player.setY(player.getY() + analogico.getKnobPercentY() * player.getSpeed());
+
+        // Map Collisions (Walls)
+        if (player.collidesBottom() || player.collidesLeft() || player.collidesRight() || player.collidesTop()) {
+            player.setX(870);
+            player.setY(50);
+        }
+
         playerRect = new Rectangle(player.getX(), player.getY(), player.getWidth() - 48, player.getHeight() - 48);
         vehicleRect1 = new Rectangle(vehicle1.getX(), vehicle1.getY(), vehicle1.getWidth(), vehicle1.getHeight());
         vehicleRect2 = new Rectangle(vehicle2.getX(), vehicle2.getY(), vehicle2.getWidth(), vehicle2.getHeight());
@@ -59,49 +70,60 @@ public class Pantalla implements Screen, InputProcessor {
         trunkRect1 = new Rectangle(trunk1.getX(), trunk1.getY(), trunk1.getWidth(), trunk1.getHeight());
         trunkRect2 = new Rectangle(trunk2.getX(), trunk2.getY(), trunk2.getWidth(), trunk2.getHeight());
 
-        // If player collides with some vehicle...
+        // Vehicle Collisions
         if (isOverlapping(playerRect, vehicleRect1) || isOverlapping(playerRect, vehicleRect2)
                 || isOverlapping(playerRect, vehicleRect3) || isOverlapping(playerRect, vehicleRect4)) {
-            int n = r.nextInt(3);
-            if (n == 0) {
-                crash.play();
-            } else if (n == 1) {
-                ro.play();
-            } else if (n == 2) {
-                cuca.play();
-            }
+            handleDeath();
+            return;
+        }
 
-            player.setX(870);
-            player.setY(50);
-            if (lifes != 0 && lifes < 4) {
-                lifes--;
-            }
-            if (lifes == 2) {
-                life = new Sprite(new Texture("2vidas.png"));
-                life.setPosition(20, 1000);
-                life.setSize(80, 80);
-            } else if (lifes == 1) {
-                life = new Sprite(new Texture("1vida.png"));
-                life.setPosition(20, 1000);
-                life.setSize(80, 80);
-            } else if (lifes == 0) {
-                life = new Sprite(new Texture("ultimaVida.png"));
-                life.setPosition(20, 1000);
-                life.setSize(80, 80);
-                gameOverAudio.play();
-                pantallaGameOver.setGameOverScreen();
-            }
-            // TODO: Conseguir la colisión con la plataforma.
-        } else if (isOverlapping(playerRect, trunkRect1)) {
-            player.setX(trunk1.getX());
-            player.setY(trunk1.getY());
-            player.setX(player.getX() + analogico.getKnobPercentX() * player.getSpeed());
-            player.setY(player.getY() + analogico.getKnobPercentY() * player.getSpeed());
+        // Trunk/Water Logic
+        boolean onTrunk = false;
+        if (isOverlapping(playerRect, trunkRect1)) {
+            player.setX(player.getX() + trunk1.getVelocity().x * delta);
+            onTrunk = true;
         } else if (isOverlapping(playerRect, trunkRect2)) {
-            player.setX(trunk2.getX());
-            player.setY(trunk2.getY());
-            player.setX(player.getX() + analogico.getKnobPercentX() * player.getSpeed());
-            player.setY(player.getY() + analogico.getKnobPercentY() * player.getSpeed());
+            player.setX(player.getX() + trunk2.getVelocity().x * delta);
+            onTrunk = true;
+        }
+
+        if (player.collidesBottomWater() || player.collidesLeftWater() || player.collidesRightWater()
+                || player.collidesTopWater()) {
+            if (!onTrunk) {
+                handleDeath();
+            }
+        }
+    }
+
+    private void handleDeath() {
+        int n = r.nextInt(3);
+        if (n == 0) {
+            crash.play();
+        } else if (n == 1) {
+            ro.play();
+        } else if (n == 2) {
+            cuca.play();
+        }
+
+        player.setX(870);
+        player.setY(50);
+        if (lifes != 0 && lifes < 4) {
+            lifes--;
+        }
+        if (lifes == 2) {
+            life = new Sprite(new Texture("2vidas.png"));
+            life.setPosition(20, 1000);
+            life.setSize(80, 80);
+        } else if (lifes == 1) {
+            life = new Sprite(new Texture("1vida.png"));
+            life.setPosition(20, 1000);
+            life.setSize(80, 80);
+        } else if (lifes == 0) {
+            life = new Sprite(new Texture("ultimaVida.png"));
+            life.setPosition(20, 1000);
+            life.setSize(80, 80);
+            gameOverAudio.play();
+            pantallaGameOver.setGameOverScreen();
         }
     }
 
@@ -135,18 +157,11 @@ public class Pantalla implements Screen, InputProcessor {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        update();
+
         renderer.setView(camera);
         renderer.render();
 
-        if (!player.collidesBottom() && !player.collidesLeft() && !player.collidesRight() && !player.collidesTop() &&
-                !player.collidesBottomWater() && !player.collidesLeftWater() && !player.collidesRightWater()
-                && !player.collidesTopWater()) {
-            player.setX(player.getX() + analogico.getKnobPercentX() * player.getSpeed());
-            player.setY(player.getY() + analogico.getKnobPercentY() * player.getSpeed());
-        } else {
-            player.setX(870);
-            player.setY(50);
-        }
         renderer.getBatch().begin();
         player.draw(renderer.getBatch());
         vehicle1.draw(renderer.getBatch());
@@ -160,8 +175,6 @@ public class Pantalla implements Screen, InputProcessor {
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-
-        update();
     }
 
     public void sprites() {
