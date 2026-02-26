@@ -13,7 +13,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -45,8 +44,7 @@ public class Pantalla implements Screen, InputProcessor {
     private Rectangle vehicleRect1, vehicleRect2, vehicleRect3, vehicleRect4, trunkRect1, trunkRect2;
     private Sound crash = Gdx.audio.newSound(Gdx.files.internal("crash.wav")),
             ro = Gdx.audio.newSound(Gdx.files.internal("Ro1.mp3")),
-            cuca = Gdx.audio.newSound(Gdx.files.internal("cucaracha.mp3")),
-            gameOverAudio = Gdx.audio.newSound(Gdx.files.internal("gameOver.wav"));
+            cuca = Gdx.audio.newSound(Gdx.files.internal("cucaracha.mp3"));
 
     public Pantalla(Frogger frogger) {
         pantallaGameOver = frogger;
@@ -55,13 +53,17 @@ public class Pantalla implements Screen, InputProcessor {
     public void update() {
         // Move player
         float delta = Gdx.graphics.getDeltaTime();
-        player.setX(player.getX() + analogico.getKnobPercentX() * player.getSpeed());
-        player.setY(player.getY() + analogico.getKnobPercentY() * player.getSpeed());
 
-        // Map Collisions (Walls)
-        if (player.collidesBottom() || player.collidesLeft() || player.collidesRight() || player.collidesTop()) {
-            player.setX(870);
-            player.setY(50);
+        float oldX = player.getX();
+        player.setX(player.getX() + analogico.getKnobPercentX() * player.getSpeed() * delta);
+        if (player.collidesLeft() || player.collidesRight()) {
+            player.setX(oldX);
+        }
+
+        float oldY = player.getY();
+        player.setY(player.getY() + analogico.getKnobPercentY() * player.getSpeed() * delta);
+        if (player.collidesBottom() || player.collidesTop()) {
+            player.setY(oldY);
         }
 
         playerRect = new Rectangle(player.getX(), player.getY(), player.getWidth() - 48, player.getHeight() - 48);
@@ -124,16 +126,12 @@ public class Pantalla implements Screen, InputProcessor {
             life = new Sprite(new Texture("ultimaVida.png"));
             life.setPosition(20, 1000);
             life.setSize(80, 80);
-            gameOverAudio.play();
             pantallaGameOver.setGameOverScreen();
         }
     }
 
-    public boolean isOverlapping(Rectangle player, Rectangle element) {
-        if (player.overlaps(element)) {
-            return true;
-        }
-        return false;
+    public boolean isOverlapping(Rectangle rect1, Rectangle rect2) {
+        return rect1.overlaps(rect2);
     }
 
     @Override
@@ -262,7 +260,6 @@ public class Pantalla implements Screen, InputProcessor {
         crash.dispose();
         cuca.dispose();
         ro.dispose();
-        gameOverAudio.dispose();
     }
 
     @Override

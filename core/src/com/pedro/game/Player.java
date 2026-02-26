@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Sprite {
 
-    private float speed = 8;
+    private float speed = 480;
     private Vector2 velocity = new Vector2();
     private TiledMapTileLayer collisionLayer;
 
