@@ -263,6 +263,8 @@ public class Pantalla implements Screen, InputProcessor {
         crash.dispose();
         cuca.dispose();
         ro.dispose();
+        stage.dispose();
+        analogico.dispose();
     }
 
     @Override
