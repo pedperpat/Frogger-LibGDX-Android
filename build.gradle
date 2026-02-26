@@ -7,10 +7,16 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.2'
-        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.20'
-        classpath 'org.wisepersist:gwt-gradle-plugin:1.1.19'
-        classpath 'org.gretty:gretty:3.1.0'
+        classpath 'com.android.tools.build:gradle:8.8.0'
+        classpath ('com.mobidevelop.robovm:robovm-gradle-plugin:2.3.24') {
+            exclude group: 'org.bouncycastle'
+        }
+        classpath ('org.wisepersist:gwt-gradle-plugin:1.1.19') {
+            exclude group: 'org.bouncycastle'
+        }
+        classpath ('org.gretty:gretty:3.1.5') {
+            exclude group: 'org.bouncycastle'
+        }
     }
 }
 
@@ -20,8 +26,8 @@ allprojects {
     version = '1.0'
     ext {
         appName = "froggerGame"
-        gdxVersion = '1.13.0'
-        roboVMVersion = '2.3.20'
+        gdxVersion = '1.14.0'
+        roboVMVersion = '2.3.24'
         box2DLightsVersion = '1.5'
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'

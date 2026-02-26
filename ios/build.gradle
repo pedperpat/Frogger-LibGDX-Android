@@ -1,7 +1,7 @@
 apply plugin: "java-library"
 apply plugin: "robovm"
 
-sourceCompatibility = 1.8
+sourceCompatibility = 17
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 ext {
