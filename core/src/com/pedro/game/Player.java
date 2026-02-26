@@ -75,7 +75,7 @@ public class Player extends Sprite {
     private boolean isWater(float x, float y) {
         TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()),
                 (int) (y / collisionLayer.getTileHeight()));
-        return cell.getTile().getProperties().containsKey("agua");
+        return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("agua");
     }
 
     public boolean collidesRight() {

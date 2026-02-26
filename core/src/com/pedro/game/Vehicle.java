@@ -30,12 +30,13 @@ public class Vehicle extends Sprite {
     }
 
     public void update(float delta) {
-        if(getX() < 1088) {
-            velocity.x += speed;
+        if (getX() >= 1088) {
+            velocity.x = -speed;
+        } else if (getX() <= -1) {
+            velocity.x = speed;
         }
-
-        else if(getX() > -1) {
-            velocity.x += -speed;
+        if (velocity.x == 0) {
+            velocity.x = speed;
         }
 
         setX(getX() + velocity.x * delta);
