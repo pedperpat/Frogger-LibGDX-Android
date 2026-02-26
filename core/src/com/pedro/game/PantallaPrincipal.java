@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class PantallaPrincipal implements Screen{
     private Frogger pantallaPrincipal;
     private SpriteBatch batch;
     private OrthographicCamera camera;
+    private FitViewport viewport;
     private TextureRegion backgroundTexture;
     private List<Textos> textosPantalla = new ArrayList<Textos>();
 
@@ -28,9 +31,10 @@ public class PantallaPrincipal implements Screen{
     @Override
     public void show() {
         batch = new SpriteBatch();
-        float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 10f * aspectRatio, 10f);
+        viewport = new FitViewport(1920, 1080, camera);
+        viewport.apply();
+
         backgroundTexture = new TextureRegion(new Texture("background2.png"), 0, 0, 1920, 1080);
 
         textosPantalla.add(new Textos("NUEVA PARTIDA", 715, 900));
@@ -41,6 +45,8 @@ public class PantallaPrincipal implements Screen{
     @Override
     public void render(float delta) {
         camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
         batch.draw(backgroundTexture, 0, 0);
         for (Textos font : textosPantalla)
@@ -50,11 +56,15 @@ public class PantallaPrincipal implements Screen{
         batch.end();
 
         if (Gdx.input.justTouched()) {
-            if (Gdx.input.getX() > 707 && Gdx.input.getX() < 1290 && Gdx.input.getY() > 160 && Gdx.input.getY() < 255) {
+            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            viewport.unproject(touchPos);
+
+            // Adjusted coordinates for bottom-up Y axis (1080 - Y)
+            if (touchPos.x > 707 && touchPos.x < 1290 && touchPos.y > 825 && touchPos.y < 920) {
                 pantallaPrincipal.setGameScreen();
-            } else if (Gdx.input.getX() > 707 && Gdx.input.getX() < 1320 && Gdx.input.getY() > 454 && Gdx.input.getY() < 585) {
+            } else if (touchPos.x > 707 && touchPos.x < 1320 && touchPos.y > 495 && touchPos.y < 626) {
                 // TODO: Pantalla de puntuaciones
-            } else if (Gdx.input.getX() > 707 && Gdx.input.getX() < 950 && Gdx.input.getY() > 750 && Gdx.input.getY() < 860) {
+            } else if (touchPos.x > 707 && touchPos.x < 950 && touchPos.y > 220 && touchPos.y < 330) {
                 Gdx.app.exit();
             }
         }
@@ -62,6 +72,7 @@ public class PantallaPrincipal implements Screen{
 
     @Override
     public void resize(int width, int height) {
+        viewport.update(width, height, true);
     }
 
     @Override
